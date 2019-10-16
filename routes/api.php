@@ -11,7 +11,9 @@
 |
 */
 
+// auth
 Route::post('login', 'Auth\LoginController')->middleware('guest');
+Route::delete('logout', 'Auth\LogoutController')->middleware('auth');
 
 // users
 Route::post('users', 'UsersController@create')->middleware('auth');
