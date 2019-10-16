@@ -21,3 +21,4 @@ Route::get('/users', 'UsersController@search')->middleware('auth');
 Route::get('/users/current', 'UsersController@current')->middleware('auth');
 Route::get('/users/{user_id}', 'UsersController@getById')->middleware('auth')->where('user_id', '\d+');
 Route::put('/users/{user_id}', 'UsersController@update')->middleware('auth')->where('user_id', '\d+');
+Route::delete('/users/{user_id}', 'UsersController@deleteUser')->middleware('auth')->where('user_id', '\d+');

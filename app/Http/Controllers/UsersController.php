@@ -169,4 +169,25 @@ class UsersController extends Controller {
       'success' => true
     ]);
   }
+
+  /**
+   * Delete user by ID.
+   *
+   * @param int $user_id
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function deleteUser(int $user_id) {
+
+    // check user exists
+    /** @var \App\Model\User $user */
+    $user = User::find($user_id);
+    if (!$user) {
+      return response()->json(['error' => 'User not found'], 404);
+    }
+
+    $this->authorize('delete', $user); // admin or self
+    $user->delete();
+
+    return response(null, 204);
+  }
 }
