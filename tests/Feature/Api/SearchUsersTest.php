@@ -111,14 +111,4 @@ class SearchUsersTest extends ApiTestCase {
     $this->assertEquals($user1->id, $responseUsers[0]['id']);
     $this->assertEquals($user2->id, $responseUsers[1]['id']);
   }
-
-  /**
-   * @param string $email
-   * @param string $password , default 'password' - is from users factory
-   * @return string
-   */
-  private function login(string $email, string $password = 'password'): string {
-    $response = $this->json('POST', '/login', compact('email', 'password'));
-    return $response->json('token');
-  }
 }

@@ -29,4 +29,14 @@ abstract class ApiTestCase extends TestCase {
     $uri = $api_prefix . $uri;
     return parent::json($method, $uri, $data, $headers);
   }
+
+  /**
+   * @param string $email
+   * @param string $password , default 'password' - is from users factory
+   * @return string
+   */
+  protected function login(string $email, string $password = 'password'): string {
+    $response = $this->json('POST', '/login', compact('email', 'password'));
+    return $response->json('token');
+  }
 }
