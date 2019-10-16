@@ -18,6 +18,12 @@ abstract class ApiTestCase extends TestCase {
     return parent::post($uri, $data, $headers);
   }
 
+  public function delete($uri, array $data = [], array $headers = []) {
+    $api_prefix = config('api.endpoint_prefix');
+    $uri = $api_prefix . $uri;
+    return parent::delete($uri, $data, $headers);
+  }
+
   public function json($method, $uri, array $data = [], array $headers = []) {
     $api_prefix = config('api.endpoint_prefix');
     $uri = $api_prefix . $uri;
