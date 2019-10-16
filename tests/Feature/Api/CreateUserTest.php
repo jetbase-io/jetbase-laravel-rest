@@ -9,11 +9,6 @@ use Illuminate\Foundation\Testing\WithFaker;
 class CreateUserTest extends ApiTestCase {
   use RefreshDatabase;
 
-  /**
-   * A basic feature test example.
-   *
-   * @return void
-   */
   public function testAsGuest() {
     $response = $this->json('POST', '/users', [
       'id'         => 0,
