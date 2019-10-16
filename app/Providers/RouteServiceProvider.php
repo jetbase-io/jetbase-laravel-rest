@@ -61,8 +61,13 @@ class RouteServiceProvider extends ServiceProvider {
    */
   protected function mapApiRoutes() {
     $prefix = config('api.endpoint_prefix', 'api');
+
+    $rateLimit = config('api.rate_limit', 3600);
+    $throttling = "throttle:$rateLimit,60"; // max requests per 60 minutes
+
     Route::prefix($prefix)
       ->middleware('api')
+      ->middleware($throttling)
       ->namespace($this->namespace)
       ->group(base_path('routes/api.php'));
   }
