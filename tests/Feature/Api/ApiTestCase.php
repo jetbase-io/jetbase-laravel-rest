@@ -33,9 +33,9 @@ abstract class ApiTestCase extends TestCase {
   /**
    * @param string $email
    * @param string $password , default 'password' - is from users factory
-   * @return string
+   * @return string|null
    */
-  protected function login(string $email, string $password = 'password'): string {
+  protected function login(string $email, string $password = 'password'): ?string {
     $response = $this->json('POST', '/login', compact('email', 'password'));
     return $response->json('token');
   }
