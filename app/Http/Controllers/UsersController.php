@@ -117,6 +117,13 @@ class UsersController extends Controller {
     return response()->json(UserResource::make($user));
   }
 
+  /**
+   * Update user by id.
+   *
+   * @param Request $request
+   * @param int $user_id
+   * @return \Illuminate\Http\JsonResponse
+   */
   public function update(Request $request, int $user_id) {
 
     // check update user exists
