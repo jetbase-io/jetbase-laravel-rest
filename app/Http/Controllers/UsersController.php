@@ -16,7 +16,8 @@ class UsersController extends Controller {
    * @return \Illuminate\Http\Response
    */
   public function create(Request $request) {
-    // todo authorize admin
+    $this->authorize('create', User::class);
+
     $data = $request->json()->all();
 
     // base validation

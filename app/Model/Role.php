@@ -19,4 +19,8 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model {
 
   public $timestamps = false;
+
+  public static function admin() {
+    return Role::whereName('admin')->firstOrFail();
+  }
 }

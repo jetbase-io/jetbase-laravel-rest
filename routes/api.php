@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //});
 
-Route::post('login', 'Auth\LoginController');
+Route::post('login', 'Auth\LoginController')->middleware('guest');
 
 // users
-Route::post('users', 'UsersController@create');
+Route::post('users', 'UsersController@create')->middleware('auth');
