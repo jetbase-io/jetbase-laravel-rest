@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use App\Model\Role;
 use App\Model\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -84,5 +85,22 @@ class UpdateUserTest extends ApiTestCase {
     $responseUser = $response2->json();
     $this->assertEquals($user->id, $responseUser['id']);
     $this->assertEquals('NewFirstName', $responseUser['first_name']);
+  }
+
+  public function testNormalUserWantUpdateRoleToAdmin() {
+    $user = factory(User::class)->create();
+    $token = $this->login($user->email);
+
+    // try update role to admin
+    $response = $this->json('PUT', "/users/{$user->id}", [
+      'role_id' => Role::admin()->id
+    ], [
+      'Authorization' => 'Bearer ' . $token
+    ]);
+    $response->assertStatus(200);
+
+    // all ok, but role not assigned
+    $dbUser = User::find($user->id);
+    $this->assertNotEquals($dbUser->role_id, Role::admin()->id);
   }
 }
