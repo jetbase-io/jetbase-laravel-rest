@@ -75,7 +75,7 @@ class UsersController extends Controller {
 
     // filter by email
     if ($qEmail = Arr::get($data, 'email')) {
-      $query->where('email', 'like', $qEmail);
+      $query->where('email', 'like', "%$qEmail%");
     }
 
     // pagination
