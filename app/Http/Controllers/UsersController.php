@@ -20,21 +20,14 @@ class UsersController extends Controller {
     $data = $request->json()->all();
 
     // base validation
-    $validator = Validator::make($data, [
+    Validator::make($data, [
       'id'         => 'required|int|in:0',
       'first_name' => 'required|string',
       'last_name'  => 'required|string',
       'email'      => 'required|string|email',
       'password'   => 'required|string|min:8',
       'role_id'    => 'required|int|in:0',
-    ]);
-    if ($validator->fails()) {
-      return response()->json([
-        'success' => false,
-        'message' => 'Bad Request',
-        'errors'  => $validator->errors()->messages()
-      ], 400);
-    }
+    ])->validate();
 
     // check email already taken
     $email = Arr::get($data, 'email');
