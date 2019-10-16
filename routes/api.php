@@ -19,3 +19,4 @@ Route::delete('/logout', 'Auth\LogoutController')->middleware('auth');
 Route::post('/users', 'UsersController@create')->middleware('auth');
 Route::get('/users', 'UsersController@search')->middleware('auth');
 Route::get('/users/current', 'UsersController@current')->middleware('auth');
+Route::get('/users/{user_id}', 'UsersController@getById')->middleware('auth')->where('user_id', '\d+');

@@ -98,4 +98,21 @@ class UsersController extends Controller {
     $authUser = auth()->user();
     return response()->json(UserResource::make($authUser));
   }
+
+  /**
+   * Get user by id.
+   *
+   * @param int $user_id
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function getById(int $user_id) {
+    $user = User::find($user_id);
+    if (!$user) {
+      return response()->json([
+        'error' => 'User not found'
+      ], 404);
+    }
+
+    return response()->json(UserResource::make($user));
+  }
 }
