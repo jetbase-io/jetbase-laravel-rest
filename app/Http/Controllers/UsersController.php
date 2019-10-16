@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
+use App\Model\Role;
 use App\Model\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -114,5 +115,51 @@ class UsersController extends Controller {
     }
 
     return response()->json(UserResource::make($user));
+  }
+
+  public function update(Request $request, int $user_id) {
+
+    // check update user exists
+    /** @var \App\Model\User $user */
+    $user = User::find($user_id);
+    if (!$user) {
+      return response()->json(['error' => 'User not found'], 404);
+    }
+
+    // check permission: self or admin
+    /** @var \App\Model\User $authUser */
+    $authUser = auth()->user();
+    if (!$authUser->can('update', $user)) {
+      return response()->json(['error' => 'Invalid user supplied'], 400);
+    }
+
+    // validate body params
+    $data = $request->json()->all();
+    Validator::make($data, [
+      'first_name' => 'nullable|string',
+      'last_name'  => 'nullable|string',
+      'email'      => 'nullable|string|email',
+      'role_id'    => 'nullable|int|in:0',
+    ])->validate();
+
+    // update only if passed
+    if (Arr::has($data, 'first_name')) $user->first_name = Arr::get($data, 'first_name');
+    if (Arr::has($data, 'last_name')) $user->last_name = Arr::get($data, 'last_name');
+    if (Arr::has($data, 'email')) $user->email = Arr::get($data, 'email');
+
+    // change role: only if role_id passed, and is admin, and role exists
+    if (Arr::has($data, 'role_id') && $authUser->can('changeRole', $user)) {
+      $role_id = Arr::get($data, 'role_id');
+      /** @var \App\Model\Role $role */
+      if ($role = Role::find($role_id)) {
+        $user->role_id = $role->id;
+      }
+    }
+
+    $user->save();
+
+    return response()->json([
+      'success' => true
+    ]);
   }
 }
