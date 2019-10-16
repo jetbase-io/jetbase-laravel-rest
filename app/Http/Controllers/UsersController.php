@@ -88,4 +88,14 @@ class UsersController extends Controller {
 
     return response()->json(UserResource::collection($users));
   }
+
+  /**
+   * Returns current auth user.
+   *
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function current() {
+    $authUser = auth()->user();
+    return response()->json(UserResource::make($authUser));
+  }
 }
