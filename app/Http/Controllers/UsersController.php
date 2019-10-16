@@ -147,7 +147,7 @@ class UsersController extends Controller {
       'first_name' => 'nullable|string',
       'last_name'  => 'nullable|string',
       'email'      => 'nullable|string|email',
-      'role_id'    => 'nullable|int|in:0',
+      'role_id'    => 'nullable|int',
     ])->validate();
 
     // update only if passed
