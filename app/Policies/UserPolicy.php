@@ -21,7 +21,7 @@ class UserPolicy {
    * @return mixed
    */
   public function viewAny(User $user) {
-    //
+    return false;
   }
 
   /**
