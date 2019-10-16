@@ -21,6 +21,11 @@ class Role extends Model {
   public $timestamps = false;
 
   public static function admin() {
+    if (!Role::whereName('admin')->exists()) {
+      $role = new Role();
+      $role->name = 'admin';
+      $role->save();
+    }
     return Role::whereName('admin')->firstOrFail();
   }
 }
