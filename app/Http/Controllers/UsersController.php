@@ -126,7 +126,7 @@ class UsersController extends Controller {
    */
   public function update(Request $request, int $user_id) {
 
-    // check update user exists
+    // check user exists
     /** @var \App\Model\User $user */
     $user = User::find($user_id);
     if (!$user) {
