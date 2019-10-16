@@ -7,6 +7,7 @@ use App\Model\Role;
 use App\Model\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller {
@@ -189,5 +190,45 @@ class UsersController extends Controller {
     $user->delete();
 
     return response(null, 204);
+  }
+
+  /**
+   * Change user's password.
+   *
+   * @param Request $request
+   * @param int $user_id
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function changePassword(Request $request, int $user_id) {
+    // check user exists
+    /** @var \App\Model\User $user */
+    $user = User::find($user_id);
+    if (!$user) {
+      return response()->json(['error' => 'Invalid user ID'], 400);
+    }
+
+    $this->authorize('changePassword', $user);
+
+    $data = $request->json()->all();
+    Validator::make($data, [
+      'old_password' => 'required|string',
+      'new_password' => 'required|string|min:8',
+    ])->validate();
+
+    // check old password
+    $old_password = $request->old_password;
+    if (!Hash::check($old_password, $user->password)) {
+      return response()->json([
+        'error' => 'The old password is not correct.'
+      ], 403);
+    }
+
+    $user->password = bcrypt($request->new_password);
+    $user->save();
+
+    return response()->json([
+      'success' => true,
+      'message' => 'Updated password successfully.'
+    ]);
   }
 }
