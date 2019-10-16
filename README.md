@@ -5,3 +5,10 @@ JetBase - Laravel REST API backend
 ```
 php artisan users:create -F"Admin" -L"Admin" -E"admin@jetbase.io" -P"admin" -A 
 ```
+
+## Test
+```
+phpunit
+# or
+npm run test
+```
