@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Model\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -50,5 +51,41 @@ class UsersController extends Controller {
     return response()->json([
       'success' => true,
     ]);
+  }
+
+  /**
+   * Search registered users.
+   *
+   * @param Request $request
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function search(Request $request) {
+    $data = $request->json()->all();
+    Validator::make($data, [
+      'email'     => 'nullable|string',
+      'page'      => 'nullable|int|min:1',
+      'page_size' => 'nullable|int|min:1',
+    ]);
+
+    $this->authorize('viewAny', User::class);
+
+    $query = User::query()->orderBy('id');
+
+    // filter by email
+    if ($qEmail = Arr::get($data, 'email')) {
+      $query->where('email', 'like', $qEmail);
+    }
+
+    // pagination
+    $page_size = Arr::get($data, 'page_size');
+    if (!is_null($page_size)) {
+      $page = Arr::get($data, 'page', 1);
+      $offset = ($page - 1) * $page_size;
+      $query->limit($page_size)->offset($offset);
+    }
+
+    $users = $query->get();
+
+    return response()->json(UserResource::collection($users));
   }
 }
