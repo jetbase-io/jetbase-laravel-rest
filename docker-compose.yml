@@ -25,7 +25,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "80:80"
+      - "8080:80"
       - "443:443"
     volumes:
       - ./:/var/www
@@ -40,7 +40,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "5432:5432"
+      - "54320:5432"
     environment:
       POSTGRES_DB: jetbase-c
       POSTGRES_USER: jetbase-c
