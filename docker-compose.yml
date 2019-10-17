@@ -42,9 +42,9 @@ services:
     ports:
       - "54320:5432"
     environment:
-      POSTGRES_DB: jetbase-c
-      POSTGRES_USER: jetbase-c
-      POSTGRES_PASSWORD: jetbase-c
+      POSTGRES_DB: jetbase
+      POSTGRES_USER: jetbase
+      POSTGRES_PASSWORD: jetbase
     volumes:
       - ./postgres:/var/lib/postgresql/data
     networks:
