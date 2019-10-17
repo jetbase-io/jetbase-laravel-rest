@@ -1,6 +1,11 @@
 # jetbase-laravel-rest
 JetBase - Laravel REST API backend
 
+## Where are API requests described?
+All API requests described in our official swagger file
+[https://github.com/jetbase-io/jetbase-swagger/blob/master/swagger.yml](https://github.com/jetbase-io/jetbase-swagger/blob/master/swagger.yml).
+For visualization use [Swagger UI](http://petstore.swagger.io/#/) paste there link to our swagger.yml
+
 ## Installation
 
 Clone repository
