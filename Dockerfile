@@ -7,6 +7,7 @@ WORKDIR "/var/www"
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
+    nano \
     libpq-dev \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install pgsql \
