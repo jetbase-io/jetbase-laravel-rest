@@ -14,13 +14,12 @@ cache:
     - vendor
 
 before_script:
-  - psql --version
-  - psql -c 'CREATE DATABASE jetbase_test;' -U postgres
   # todo lint
-  #- cp .env.travis .env
-  #- composer self-update
-  #- composer install --no-interaction
-  #- php artisan migrate --no-interaction -vvv
+  - psql -c 'CREATE DATABASE jetbase_test;' -U postgres
+  - cp .env.travis .env
+  - composer self-update
+  - composer install --no-interaction
+  - php artisan migrate --no-interaction -vvv
 
-#script:
-#  - vendor/bin/phpunit
+script:
+  - vendor/bin/phpunit
