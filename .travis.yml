@@ -19,11 +19,11 @@ cache:
 
 before_script:
   # todo lint
-  - cp .env.travis .env
+  #- cp .env.travis .env
   - psql -c 'create database travis_ci_test;' -U postgres
-  - composer self-update
-  - composer install --no-interaction
-  - php artisan migrate --no-interaction -vvv
+  #- composer self-update
+  #- composer install --no-interaction
+  #- php artisan migrate --no-interaction -vvv
 
-script:
-  - vendor/bin/phpunit
+#script:
+#  - vendor/bin/phpunit
