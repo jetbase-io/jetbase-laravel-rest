@@ -7,6 +7,10 @@ services:
 
 addons:
   postgresql: "12.0"
+  apt:
+    packages:
+      - postgresql-12
+      - postgresql-client-12
 
 cache:
   directories:
