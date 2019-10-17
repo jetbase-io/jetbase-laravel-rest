@@ -75,7 +75,7 @@ cd <project-dir>
 php artisan serve
 ```
 
-Then go to [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser
+Then go to [http://localhost:8000](http://localhost:8000) in your browser
 
 ## Nginx config
 If your want use nginx. There is a basic example of nginx config.
