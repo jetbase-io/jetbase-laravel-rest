@@ -4,10 +4,7 @@ services:
 
   # PHP Service
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: php:7.2-fpm
+    build: ./
     container_name: app
     restart: unless-stopped
     tty: true
@@ -37,9 +34,9 @@ services:
       - app-network
 
   # PostgreSQL Service
-  db:
+  postgres:
     image: postgres:10
-    container_name: db
+    container_name: postgres
     restart: unless-stopped
     tty: true
     ports:
@@ -49,7 +46,7 @@ services:
       POSTGRES_USER: jetbase-c
       POSTGRES_PASSWORD: jetbase-c
     volumes:
-      - dbdata:/var/lib/postgresql/data/
+      - ./postgres:/var/lib/postgresql/data
     networks:
       - app-network
 
