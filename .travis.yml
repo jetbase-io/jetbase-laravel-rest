@@ -16,7 +16,6 @@ cache:
 before_script:
   - psql --version
   - psql -c 'CREATE DATABASE jetbase_test;' -U postgres
-  - psql -c 'CREATE ROLE travis SUPERUSER LOGIN CREATEDB;' -U postgres
   # todo lint
   #- cp .env.travis .env
   #- composer self-update
