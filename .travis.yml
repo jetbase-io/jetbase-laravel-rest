@@ -6,15 +6,11 @@ services:
   - postgresql
 
 addons:
-  postgresql: "11"
-  apt:
-    packages:
-      - postgresql-11
-      - postgresql-client-11
+  postgresql: "12"
 
 env:
   global:
-    - PGPORT=5432
+    - PGPORT=5433
 
 cache:
   directories:
