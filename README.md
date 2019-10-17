@@ -42,7 +42,7 @@ php artisan users:create \
 Flag `-A` means add admin role.
 
 ## Testing
-**Important** Before run tests create testing database.
+> :warning: **Important**: Before run tests create testing database!
 ```
 cd <project-dir>
 cp .env .env.testing
