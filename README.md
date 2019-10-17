@@ -78,8 +78,8 @@ php artisan serve
 Then go to [http://localhost:8000](http://localhost:8000) in your browser
 
 ## Nginx config
-If your want use nginx. There is a basic example of nginx config.
-In all bellow examples instead `jetbase-rest.app` use your real domain.
+If your want use nginx. There is a basic example of nginx config.<br>
+*In all bellow examples instead `jetbase-rest.app` use your real domain.*
 ```
 cd /etc/nginx/sites-available
 sudo nano jetbase-rest.app
