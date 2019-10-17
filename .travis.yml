@@ -2,6 +2,9 @@ language: php
 php:
   - 7.2
 
+services:
+  - postgresql
+
 addons:
   postgresql: "12.0"
 
