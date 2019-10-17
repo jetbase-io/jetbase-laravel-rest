@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     nano \
     libpq-dev \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install pgsql \
+    && docker-php-ext-install pdo pgsql pdo_pgsql \
     # Clear cache
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
