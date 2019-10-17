@@ -7,10 +7,6 @@ services:
 
 addons:
   postgresql: "12"
-  apt:
-    packages:
-      - postgresql-12
-      - postgresql-client-12
 
 env:
   global:
@@ -21,10 +17,19 @@ cache:
     - node_modules
     - vendor
 
+before_install:
+  - sudo apt-get update
+  - sudo apt-get --yes remove postgresql\*
+  - sudo apt-get install -y postgresql-12 postgresql-client-12
+  - sudo cp /etc/postgresql/12/main/pg_hba.conf
+  - sudo service postgresql restart 12
+
 before_script:
+  - psql --version
+  - psql -c 'CREATE DATABASE jetbase_test;' -U postgres
+  - psql -c 'CREATE ROLE travis SUPERUSER LOGIN CREATEDB;' -U postgres
   # todo lint
   #- cp .env.travis .env
-  - psql -c 'create database travis_ci_test;' -U postgres
   #- composer self-update
   #- composer install --no-interaction
   #- php artisan migrate --no-interaction -vvv
