@@ -16,7 +16,7 @@ cache:
 before_script:
   # todo lint
   - cp .env.travis .env
-  - sudo psql -c 'CREATE DATABASE testing;' -U postgres
+  - sudo psql -c 'CREATE DATABASE testing;'
   - composer self-update
   - composer install --no-interaction
   - php artisan migrate --no-interaction -vvv
