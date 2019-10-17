@@ -32,8 +32,14 @@ php artisan migrate
 
 Create admin
 ```
-php artisan users:create -F"<admin_first_name>" -L"<admin_last_name>" -E"<admin_email>" -P"<admin_password>" -A 
+php artisan users:create \
+-F"<admin_first_name>" \
+-L"<admin_last_name>" \
+-E"<admin_email>" \
+-P"<admin_password>" \
+-A 
 ```
+Flag `-A` means add admin role.
 
 ## Testing
 **Important** Before run tests create testing database.
