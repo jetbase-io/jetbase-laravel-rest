@@ -1,5 +1,4 @@
-# jetbase-laravel-rest
-JetBase - Laravel REST API backend
+# Jetbase Laravel REST API
 
 [![Build Status](https://travis-ci.org/lukas-pierce/jetbase-laravel-rest.svg?branch=master)](https://travis-ci.org/lukas-pierce/jetbase-laravel-rest)
 
