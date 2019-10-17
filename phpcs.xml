@@ -5,7 +5,7 @@
 
   <!--  <file>./app/ApiResponse.php</file>-->
 
-  <exclude-pattern type="relative">^/vendor/*</exclude-pattern>
+  <exclude-pattern>./vendor/*</exclude-pattern>
 
   <arg name="basepath" value="."/>
   <arg name="colors"/>
