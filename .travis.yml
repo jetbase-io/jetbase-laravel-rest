@@ -1,0 +1,22 @@
+language: php
+php:
+  - ^7.2
+
+addons:
+  postgresql: "12.0"
+
+cache:
+  directories:
+    - node_modules
+    - vendor
+
+before_script:
+  # todo lint
+  - cp .env.travis .env
+  - sudo psql -c 'CREATE DATABASE testing;'
+  - composer self-update
+  - composer install --no-interaction
+  - php artisan migrate --no-interaction -vvv
+
+script:
+  - vendor/bin/phpunit
