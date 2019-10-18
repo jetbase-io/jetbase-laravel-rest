@@ -13,10 +13,10 @@
   <arg name="parallel" value="75"/>
   <arg value="np"/>
 
-  <!--  &lt;!&ndash; Don't hide tokenizer exceptions &ndash;&gt;-->
-  <!--  <rule ref="Internal.Tokenizer.Exception">-->
-  <!--    <type>error</type>-->
-  <!--  </rule>-->
+    <!-- Don't hide tokenizer exceptions -->
+    <rule ref="Internal.Tokenizer.Exception">
+      <type>error</type>
+    </rule>
 
   <!-- Include the whole PEAR standard -->
   <rule ref="PEAR">
@@ -26,6 +26,7 @@
     <exclude name="PEAR.Functions.FunctionCallSignature"/>
     <exclude name="Generic.Commenting.DocComment"/>
     <exclude name="PEAR.Files.IncludingFile"/>
+    <exclude name="PEAR.NamingConventions.ValidFunctionName.PrivateNoUnderscore"/>
   </rule>
 
   <!-- PEAR uses warnings for inline control structures, so switch back to errors -->
@@ -40,63 +41,33 @@
   <rule ref="Squiz.Arrays.ArrayDeclaration.KeyNotAligned">
     <severity>0</severity>
   </rule>
-  <!--  <rule ref="Squiz.Arrays.ArrayDeclaration.ValueNotAligned">-->
-  <!--    <severity>0</severity>-->
-  <!--  </rule>-->
-  <!--  <rule ref="Squiz.Arrays.ArrayDeclaration.CloseBraceNotAligned">-->
-  <!--    <severity>0</severity>-->
-  <!--  </rule>-->
-  <!--  <rule ref="Squiz.Arrays.ArrayDeclaration.CloseBraceNewLine">-->
-  <!--    <severity>0</severity>-->
-  <!--  </rule>-->
+  <rule ref="Squiz.Arrays.ArrayDeclaration.ValueNotAligned">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.Arrays.ArrayDeclaration.CloseBraceNotAligned">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.Arrays.ArrayDeclaration.CloseBraceNewLine">
+    <severity>0</severity>
+  </rule>
 
-  <!--  &lt;!&ndash; Check var names, but we don't want leading underscores for private vars &ndash;&gt;-->
-  <!--  <rule ref="Squiz.NamingConventions.ValidVariableName"/>-->
-  <!--  <rule ref="Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore">-->
-  <!--    <severity>0</severity>-->
-  <!--  </rule>-->
+  <!-- Only one argument per line in multi-line function calls -->
+  <rule ref="PEAR.Functions.FunctionCallSignature">
+    <properties>
+      <property name="allowMultipleArguments" value="false"/>
+    </properties>
+  </rule>
 
-  <!--  &lt;!&ndash; Only one argument per line in multi-line function calls &ndash;&gt;-->
-  <!--  <rule ref="PEAR.Functions.FunctionCallSignature">-->
-  <!--    <properties>-->
-  <!--      <property name="allowMultipleArguments" value="false"/>-->
-  <!--    </properties>-->
-  <!--  </rule>-->
-
-  <!--  &lt;!&ndash; Have 12 chars padding maximum and always show as errors &ndash;&gt;-->
-  <!--  <rule ref="Generic.Formatting.MultipleStatementAlignment">-->
-  <!--    <properties>-->
-  <!--      <property name="maxPadding" value="12"/>-->
-  <!--      <property name="error" value="true"/>-->
-  <!--    </properties>-->
-  <!--  </rule>-->
-
-  <!--  &lt;!&ndash; Ban some functions &ndash;&gt;-->
-  <!--  <rule ref="Generic.PHP.ForbiddenFunctions">-->
-  <!--    <properties>-->
-  <!--      <property name="forbiddenFunctions" type="array">-->
-  <!--        <element key="sizeof" value="count"/>-->
-  <!--        <element key="delete" value="unset"/>-->
-  <!--        <element key="print" value="echo"/>-->
-  <!--        <element key="is_null" value="null"/>-->
-  <!--        <element key="create_function" value="null"/>-->
-  <!--      </property>-->
-  <!--    </properties>-->
-  <!--  </rule>-->
-
-  <!--  &lt;!&ndash; Private methods MUST not be prefixed with an underscore &ndash;&gt;-->
-  <!--  <rule ref="PSR2.Methods.MethodDeclaration.Underscore">-->
-  <!--    <type>error</type>-->
-  <!--  </rule>-->
-
-  <!--  &lt;!&ndash; Private properties MUST not be prefixed with an underscore &ndash;&gt;-->
-  <!--  <rule ref="PSR2.Classes.PropertyDeclaration.Underscore">-->
-  <!--    <type>error</type>-->
-  <!--  </rule>-->
-
-  <!--  &lt;!&ndash; The testing bootstrap file uses string concats to stop IDEs seeing the class aliases &ndash;&gt;-->
-  <!--  <rule ref="Generic.Strings.UnnecessaryStringConcat">-->
-  <!--    <exclude-pattern>tests/bootstrap.php</exclude-pattern>-->
-  <!--  </rule>-->
+  <!-- Ban some functions -->
+  <rule ref="Generic.PHP.ForbiddenFunctions">
+    <properties>
+      <property name="forbiddenFunctions" type="array">
+        <element key="sizeof" value="count"/>
+        <element key="delete" value="unset"/>
+        <element key="print" value="echo"/>
+        <element key="create_function" value="null"/>
+      </property>
+    </properties>
+  </rule>
 
 </ruleset>
