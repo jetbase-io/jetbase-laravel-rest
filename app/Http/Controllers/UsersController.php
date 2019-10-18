@@ -26,13 +26,16 @@ class UsersController extends Controller
 
         $data = $request->json()->all();
 
+        /** @var \App\Model\User $authUser */
+        $authUser = auth()->user();
+
         // base validation
         Validator::make($data, [
             'first_name' => 'required|string',
             'last_name'  => 'required|string',
             'email'      => 'required|string|email',
             'password'   => 'required|string|min:8',
-            'role_id'    => 'required|int|in:0',
+            'role_id'    => 'nullable|int|min:0',
         ])->validate();
 
         // check email already taken
@@ -50,6 +53,16 @@ class UsersController extends Controller
         $user->last_name = Arr::get($data, 'last_name');
         $user->email = Arr::get($data, 'email');
         $user->password = bcrypt(Arr::get($data, 'password'));
+
+        // assign role: only if role_id passed, and is admin, and role exists
+        if (Arr::has($data, 'role_id') && $authUser->can('assignRole', User::class)) {
+            $role_id = Arr::get($data, 'role_id');
+            /** @var \App\Model\Role $role */
+            if ($role = Role::find($role_id)) {
+                $user->role_id = $role->id;
+            }
+        }
+
         $user->save();
 
         return response()->json([
