@@ -14,7 +14,7 @@ cache:
     - vendor
 
 before_script:
-  # todo lint
+  - ./vendor/bin/phpcs .
   - psql -c 'CREATE DATABASE jetbase_test;' -U postgres
   - cp .env.travis .env
   - composer self-update
