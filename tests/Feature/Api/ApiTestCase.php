@@ -9,29 +9,29 @@ abstract class ApiTestCase extends TestCase
 
     public function get($uri, array $headers = [])
     {
-        $api_prefix = config('api.endpoint_prefix');
-        $uri = $api_prefix . $uri;
+        $apiPrefix = config('api.endpoint_prefix');
+        $uri = $apiPrefix . $uri;
         return parent::get($uri, $headers);
     }
 
     public function post($uri, array $data = [], array $headers = [])
     {
-        $api_prefix = config('api.endpoint_prefix');
-        $uri = $api_prefix . $uri;
+        $apiPrefix = config('api.endpoint_prefix');
+        $uri = $apiPrefix . $uri;
         return parent::post($uri, $data, $headers);
     }
 
     public function delete($uri, array $data = [], array $headers = [])
     {
-        $api_prefix = config('api.endpoint_prefix');
-        $uri = $api_prefix . $uri;
+        $apiPrefix = config('api.endpoint_prefix');
+        $uri = $apiPrefix . $uri;
         return parent::delete($uri, $data, $headers);
     }
 
     public function json($method, $uri, array $data = [], array $headers = [])
     {
-        $api_prefix = config('api.endpoint_prefix');
-        $uri = $api_prefix . $uri;
+        $apiPrefix = config('api.endpoint_prefix');
+        $uri = $apiPrefix . $uri;
         return parent::json($method, $uri, $data, $headers);
     }
 
