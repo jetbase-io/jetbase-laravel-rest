@@ -6,6 +6,7 @@
   <exclude-pattern>*/vendor/*</exclude-pattern>
   <exclude-pattern>^/public/index.php</exclude-pattern>
   <exclude-pattern>*/storage/framework/views/*</exclude-pattern>
+  <exclude-pattern>*/bootstrap/cache/*</exclude-pattern>
 
   <arg name="basepath" value="."/>
   <arg name="colors"/>
