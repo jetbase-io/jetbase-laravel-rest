@@ -28,6 +28,7 @@ class Role extends Model
             $role->name = 'admin';
             $role->save();
         }
+
         return Role::whereName('admin')->firstOrFail();
     }
 }
