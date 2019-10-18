@@ -20,7 +20,6 @@ class UserResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name'  => $this->last_name,
             'email'      => $this->email,
-            'password'   => "<HASHED>",
             'role_id'    => (int) $this->role_id,
         ];
     }
