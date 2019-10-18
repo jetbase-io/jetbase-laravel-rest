@@ -4,6 +4,7 @@
   <description>The coding standard for Jetbase' team Laravel projects</description>
 
   <exclude-pattern>*/vendor/*</exclude-pattern>
+  <exclude-pattern type="relative">^/public/index.php</exclude-pattern>
 
   <arg name="basepath" value="."/>
   <arg name="colors"/>
