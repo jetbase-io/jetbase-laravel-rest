@@ -16,16 +16,18 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Role whereName($value)
  * @mixin \Eloquent
  */
-class Role extends Model {
+class Role extends Model
+{
 
-  public $timestamps = false;
+    public $timestamps = false;
 
-  public static function admin() {
-    if (!Role::whereName('admin')->exists()) {
-      $role = new Role();
-      $role->name = 'admin';
-      $role->save();
+    public static function admin()
+    {
+        if (!Role::whereName('admin')->exists()) {
+            $role = new Role();
+            $role->name = 'admin';
+            $role->save();
+        }
+        return Role::whereName('admin')->firstOrFail();
     }
-    return Role::whereName('admin')->firstOrFail();
-  }
 }
