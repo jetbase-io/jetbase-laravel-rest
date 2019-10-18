@@ -104,6 +104,7 @@ class UsersController extends Controller
     public function current()
     {
         $authUser = auth()->user();
+
         return response()->json(UserResource::make($authUser));
     }
 
@@ -161,9 +162,15 @@ class UsersController extends Controller
         ])->validate();
 
         // update only if passed
-        if (Arr::has($data, 'first_name')) $user->first_name = Arr::get($data, 'first_name');
-        if (Arr::has($data, 'last_name')) $user->last_name = Arr::get($data, 'last_name');
-        if (Arr::has($data, 'email')) $user->email = Arr::get($data, 'email');
+        if (Arr::has($data, 'first_name')) {
+            $user->first_name = Arr::get($data, 'first_name');
+        }
+        if (Arr::has($data, 'last_name')) {
+            $user->last_name = Arr::get($data, 'last_name');
+        }
+        if (Arr::has($data, 'email')) {
+            $user->email = Arr::get($data, 'email');
+        }
 
         // change role: only if role_id passed, and is admin, and role exists
         if (Arr::has($data, 'role_id') && $authUser->can('changeRole', $user)) {
