@@ -122,4 +122,17 @@ class UserPolicy
     {
         return false;
     }
+
+    /**
+     * User can change role for other user?
+     *
+     * @param \App\Model\User $user
+     * @param \App\Model\User $model
+     *
+     * @return bool
+     */
+    public function changeRole(User $user, User $model)
+    {
+        return false;
+    }
 }
