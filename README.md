@@ -1,6 +1,7 @@
 # Jetbase Laravel REST API
 
 [![Build Status](https://travis-ci.org/lukas-pierce/jetbase-laravel-rest.svg?branch=master)](https://travis-ci.org/lukas-pierce/jetbase-laravel-rest)
+[![Made in MVP engine](https://img.shields.io/badge/made%20in-MVP%20engine-brightgreen.svg)](https://mvpngn.com/)
 
 ## Where are API requests described?
 All API requests described in our official [swagger.yml](https://github.com/jetbase-io/jetbase-swagger/blob/master/swagger.yml) file.<br>
