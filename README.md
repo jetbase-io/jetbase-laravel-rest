@@ -131,3 +131,17 @@ sudo systemctl reload nginx
 ```
 
 Then go to [http://jetbase-rest.app](http://jetbase-rest.app) in your browser
+
+
+## Running Laravel REST server in docker
+
+```
+# build images
+docker-compose build
+
+# up containers in daemon mode
+docker-compose up -d
+
+# run migration in 'app' container
+docker-compose exec app php artisan migrate
+```
