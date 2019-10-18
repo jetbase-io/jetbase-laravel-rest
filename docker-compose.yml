@@ -34,9 +34,9 @@ services:
       - app-network
 
   # PostgreSQL Service
-  postgres:
-    image: postgres:10
-    container_name: postgres
+  db:
+    image: postgres
+    container_name: db
     restart: unless-stopped
     tty: true
     ports:
@@ -46,7 +46,7 @@ services:
       POSTGRES_USER: jetbase
       POSTGRES_PASSWORD: jetbase
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - dbdata:/var/lib/postgresql/data
     networks:
       - app-network
 
