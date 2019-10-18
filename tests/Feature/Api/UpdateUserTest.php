@@ -109,4 +109,34 @@ class UpdateUserTest extends ApiTestCase
         $dbUser = User::find($user->id);
         $this->assertNotEquals($dbUser->role_id, Role::admin()->id);
     }
+
+    public function testAdminWantChangeRoleForUser()
+    {
+        // create admin
+        $admin = factory(User::class)->state('admin')->create();
+
+        // create normal user without any role
+        $user = factory(User::class)->create();
+
+        // create some role
+        $role = new Role();
+        $role->name = 'some_role';
+        $role->save();
+
+        // login by admin
+        $token = $this->login($admin->email);
+
+        // admin tries change user's role
+        $response = $this->json('PUT', "/users/$user->id", [
+            'role_id' => $role->id
+        ], [
+            'Authorization' => 'Bearer ' . $token
+        ]);
+        $response->assertStatus(200);
+
+        // retrieve user from db
+        $user = User::findOrFail($user->id);
+        // check role changed
+        $this->assertEquals($role->id, $user->role_id);
+    }
 }
