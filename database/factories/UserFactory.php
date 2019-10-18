@@ -19,14 +19,14 @@ use Illuminate\Support\Str;
 */
 
 $factory->define(User::class, function (Faker $faker) {
-  return [
-    'first_name' => $faker->firstName,
-    'last_name'  => $faker->lastName,
-    'email'      => $faker->unique()->safeEmail,
-    'password'   => bcrypt('password'), // password
-  ];
+    return [
+        'first_name' => $faker->firstName,
+        'last_name'  => $faker->lastName,
+        'email'      => $faker->unique()->safeEmail,
+        'password'   => bcrypt('password'), // password
+    ];
 });
 
 $factory->state(User::class, 'admin', [
-  'role_id' => Role::admin()->id,
+    'role_id' => Role::admin()->id,
 ]);
