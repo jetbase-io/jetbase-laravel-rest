@@ -60,12 +60,13 @@ class CreateUserTest extends ApiTestCase
 
         // try create user
         $response = $this->json('POST', '/users', [
-            'id'         => 0,
-            'first_name' => 'Test',
-            'last_name'  => 'Test',
-            'email'      => 'test@mail.com',
-            'password'   => 'password',
-            'role_id'    => $role->id
+            'id'                    => 0,
+            'first_name'            => 'Test',
+            'last_name'             => 'Test',
+            'email'                 => 'test@mail.com',
+            'password'              => 'password',
+            'password_confirmation' => 'password',
+            'role_id'               => $role->id
         ], [
             'Authorization' => 'Bearer ' . $token
         ]);

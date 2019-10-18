@@ -34,7 +34,7 @@ class UsersController extends Controller
             'first_name' => 'required|string',
             'last_name'  => 'required|string',
             'email'      => 'required|string|email',
-            'password'   => 'required|string|min:8',
+            'password'   => 'required|string|min:8|confirmed',
             'role_id'    => 'nullable|int|min:0',
         ])->validate();
 
