@@ -28,7 +28,6 @@ class UsersController extends Controller
 
         // base validation
         Validator::make($data, [
-            'id'         => 'required|int|in:0',
             'first_name' => 'required|string',
             'last_name'  => 'required|string',
             'email'      => 'required|string|email',

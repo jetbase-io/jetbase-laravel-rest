@@ -13,7 +13,6 @@ class CreateUserTest extends ApiTestCase
     public function testAsGuest()
     {
         $response = $this->json('POST', '/users', [
-            'id'         => 0,
             'first_name' => 'Test',
             'last_name'  => 'Test',
             'email'      => 'test@mail.com',
