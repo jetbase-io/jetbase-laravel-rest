@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use App\Model\Role;
 use App\Model\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -17,7 +18,6 @@ class CreateUserTest extends ApiTestCase
             'last_name'  => 'Test',
             'email'      => 'test@mail.com',
             'password'   => 'password',
-            'role_id'    => '0',
         ]);
 
         $response->assertStatus(401);
@@ -38,7 +38,6 @@ class CreateUserTest extends ApiTestCase
             'last_name'  => 'Test',
             'email'      => 'test@mail.com',
             'password'   => 'password',
-            'role_id'    => 0,
         ], [
             'Authorization' => 'Bearer ' . $token
         ]);
@@ -51,6 +50,11 @@ class CreateUserTest extends ApiTestCase
         // create admin
         factory(User::class)->state('admin')->create(['email' => 'admin@mail.com']);
 
+        // create test role
+        $role = new Role();
+        $role->name = 'some_role';
+        $role->save();
+
         // perform login
         $token = $this->login('admin@mail.com');
 
@@ -61,7 +65,7 @@ class CreateUserTest extends ApiTestCase
             'last_name'  => 'Test',
             'email'      => 'test@mail.com',
             'password'   => 'password',
-            'role_id'    => 0,
+            'role_id'    => $role->id
         ], [
             'Authorization' => 'Bearer ' . $token
         ]);
@@ -76,5 +80,12 @@ class CreateUserTest extends ApiTestCase
         $searchUsers = $searchResponse->json();
         $this->assertIsArray($searchUsers);
         $this->assertCount(2, $searchUsers);
+
+        // check created user
+        $user = $searchUsers[1]; // users ordered by id, [0] is admin, [1] - created via API
+        $this->assertEquals($user['first_name'], 'Test');
+        $this->assertEquals($user['last_name'], 'Test');
+        $this->assertEquals($user['email'], 'test@mail.com');
+        $this->assertEquals($user['role_id'], $role->id);
     }
 }
