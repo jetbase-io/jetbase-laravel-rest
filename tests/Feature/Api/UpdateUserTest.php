@@ -7,100 +7,106 @@ use App\Model\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 
-class UpdateUserTest extends ApiTestCase {
-  use RefreshDatabase;
+class UpdateUserTest extends ApiTestCase
+{
+    use RefreshDatabase;
 
-  public function testAsGuest() {
-    // create user
-    $user = factory(User::class)->create(['first_name' => 'Initial']);
+    public function testAsGuest()
+    {
+        // create user
+        $user = factory(User::class)->create(['first_name' => 'Initial']);
 
-    $response = $this->json('PUT', "/users/$user->id", [
-      'first_name' => 'Changed'
-    ]);
+        $response = $this->json('PUT', "/users/$user->id", [
+            'first_name' => 'Changed'
+        ]);
 
-    $response->assertStatus(401);
-  }
+        $response->assertStatus(401);
+    }
 
-  public function testTryUpdateNotMe() {
-    $user1 = factory(User::class)->create(['first_name' => 'Alex']);
-    $user2 = factory(User::class)->create(['first_name' => 'Lukas']);
+    public function testTryUpdateNotMe()
+    {
+        $user1 = factory(User::class)->create(['first_name' => 'Alex']);
+        $user2 = factory(User::class)->create(['first_name' => 'Lukas']);
 
-    // authorize by user1
-    $token = $this->login($user1->email);
+        // authorize by user1
+        $token = $this->login($user1->email);
 
-    // try update user2
-    $response = $this->json('PUT', "/users/$user2->id", [
-      'first_name' => 'Hacker Was Here'
-    ], [
-      'Authorization' => 'Bearer ' . $token
-    ]);
+        // try update user2
+        $response = $this->json('PUT', "/users/$user2->id", [
+            'first_name' => 'Hacker Was Here'
+        ], [
+            'Authorization' => 'Bearer ' . $token
+        ]);
 
-    $response->assertStatus(400); // not allow change not self
-  }
+        $response->assertStatus(400); // not allow change not self
+    }
 
-  public function testTryUpdateMe() {
-    $user = factory(User::class)->create(['first_name' => 'Alex']);
+    public function testTryUpdateMe()
+    {
+        $user = factory(User::class)->create(['first_name' => 'Alex']);
 
-    // authorize by user
-    $token = $this->login($user->email);
+        // authorize by user
+        $token = $this->login($user->email);
 
-    // try update user
-    $response = $this->json('PUT', "/users/$user->id", [
-      'first_name' => 'MyNewFirstName'
-    ], [
-      'Authorization' => 'Bearer ' . $token
-    ]);
-    $response->assertStatus(200);
+        // try update user
+        $response = $this->json('PUT', "/users/$user->id", [
+            'first_name' => 'MyNewFirstName'
+        ], [
+            'Authorization' => 'Bearer ' . $token
+        ]);
+        $response->assertStatus(200);
 
-    // fetch user by id
-    $response2 = $this->json('GET', "/users/$user->id", [], [
-      'Authorization' => 'Bearer ' . $token
-    ]);
-    $response2->assertStatus(200);
-    $responseUser = $response2->json();
-    $this->assertEquals($user->id, $responseUser['id']);
-    $this->assertEquals('MyNewFirstName', $responseUser['first_name']);
-  }
+        // fetch user by id
+        $response2 = $this->json('GET', "/users/$user->id", [], [
+            'Authorization' => 'Bearer ' . $token
+        ]);
+        $response2->assertStatus(200);
+        $responseUser = $response2->json();
+        $this->assertEquals($user->id, $responseUser['id']);
+        $this->assertEquals('MyNewFirstName', $responseUser['first_name']);
+    }
 
-  public function testTryUpdateAsAdmin() {
-    $user = factory(User::class)->create(['first_name' => 'Alex']);
-    $admin = factory(User::class)->state('admin')->create(['first_name' => 'Admin']);
+    public function testTryUpdateAsAdmin()
+    {
+        $user = factory(User::class)->create(['first_name' => 'Alex']);
+        $admin = factory(User::class)->state('admin')->create(['first_name' => 'Admin']);
 
-    // authorize by admin
-    $token = $this->login($admin->email);
+        // authorize by admin
+        $token = $this->login($admin->email);
 
-    // try update user
-    $response = $this->json('PUT', "/users/$user->id", [
-      'first_name' => 'NewFirstName'
-    ], [
-      'Authorization' => 'Bearer ' . $token
-    ]);
-    $response->assertStatus(200);
+        // try update user
+        $response = $this->json('PUT', "/users/$user->id", [
+            'first_name' => 'NewFirstName'
+        ], [
+            'Authorization' => 'Bearer ' . $token
+        ]);
+        $response->assertStatus(200);
 
-    // fetch user by id
-    $response2 = $this->json('GET', "/users/$user->id", [], [
-      'Authorization' => 'Bearer ' . $token
-    ]);
-    $response2->assertStatus(200);
-    $responseUser = $response2->json();
-    $this->assertEquals($user->id, $responseUser['id']);
-    $this->assertEquals('NewFirstName', $responseUser['first_name']);
-  }
+        // fetch user by id
+        $response2 = $this->json('GET', "/users/$user->id", [], [
+            'Authorization' => 'Bearer ' . $token
+        ]);
+        $response2->assertStatus(200);
+        $responseUser = $response2->json();
+        $this->assertEquals($user->id, $responseUser['id']);
+        $this->assertEquals('NewFirstName', $responseUser['first_name']);
+    }
 
-  public function testNormalUserWantUpdateRoleToAdmin() {
-    $user = factory(User::class)->create();
-    $token = $this->login($user->email);
+    public function testNormalUserWantUpdateRoleToAdmin()
+    {
+        $user = factory(User::class)->create();
+        $token = $this->login($user->email);
 
-    // try update role to admin
-    $response = $this->json('PUT', "/users/{$user->id}", [
-      'role_id' => Role::admin()->id
-    ], [
-      'Authorization' => 'Bearer ' . $token
-    ]);
-    $response->assertStatus(200);
+        // try update role to admin
+        $response = $this->json('PUT', "/users/{$user->id}", [
+            'role_id' => Role::admin()->id
+        ], [
+            'Authorization' => 'Bearer ' . $token
+        ]);
+        $response->assertStatus(200);
 
-    // all ok, but role not assigned
-    $dbUser = User::find($user->id);
-    $this->assertNotEquals($dbUser->role_id, Role::admin()->id);
-  }
+        // all ok, but role not assigned
+        $dbUser = User::find($user->id);
+        $this->assertNotEquals($dbUser->role_id, Role::admin()->id);
+    }
 }
