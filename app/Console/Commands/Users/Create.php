@@ -6,8 +6,7 @@ use App\Model\Role;
 use App\Model\User;
 use Illuminate\Console\Command;
 
-class Create extends Command
-{
+class Create extends Command {
     /**
      * The name and signature of the console command.
      *
