@@ -57,13 +57,13 @@ class Create extends Command
         $user->email = $email;
         $user->password = bcrypt($password);
         if ($isAdmin) {
-            $user->role_id = $this->_adminRole()->id;
+            $user->role_id = $this->adminRole()->id;
         }
         $user->save();
         $this->comment('user created');
     }
 
-    private function _adminRole(): Role
+    private function adminRole(): Role
     {
         $role = Role::whereName('admin')->first();
 
