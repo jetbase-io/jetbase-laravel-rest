@@ -109,4 +109,17 @@ class UserPolicy
     {
         //
     }
+
+    /**
+     * Determine whether the user can assign role to the model.
+     *
+     * @param \App\Model\User $user
+     * @param \App\Model\User $model
+     *
+     * @return bool
+     */
+    public function assignRole(User $user, User $model)
+    {
+        return false;
+    }
 }
