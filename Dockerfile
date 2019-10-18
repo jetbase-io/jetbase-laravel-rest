@@ -9,6 +9,7 @@ WORKDIR "/var/www"
 RUN apt-get update && apt-get install -y \
     nano \
     libpq-dev \
+    postgresql-client \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install pdo pgsql pdo_pgsql \
     # Clear cache
