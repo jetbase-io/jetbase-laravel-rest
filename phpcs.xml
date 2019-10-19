@@ -4,6 +4,7 @@
   <description>The coding standard for Jetbase' team Laravel projects</description>
 
   <exclude-pattern>*/vendor/*</exclude-pattern>
+  <exclude-pattern>*/node_modules/*</exclude-pattern>
   <exclude-pattern>^/public/index.php</exclude-pattern>
   <exclude-pattern>*/storage/framework/views/*</exclude-pattern>
   <exclude-pattern>*/bootstrap/cache/*</exclude-pattern>
