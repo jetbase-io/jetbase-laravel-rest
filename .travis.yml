@@ -1,0 +1,25 @@
+language: php
+php:
+  - 7.2
+
+services:
+  - postgresql
+
+addons:
+  postgresql: "10"
+
+cache:
+  directories:
+    - node_modules
+    - vendor
+
+before_script:
+  - composer self-update
+  - composer install --no-interaction
+  - ./vendor/bin/phpcs .
+  - psql -c 'CREATE DATABASE jetbase_test;' -U postgres
+  - cp .env.travis .env
+  - php artisan migrate --no-interaction -vvv
+
+script:
+  - vendor/bin/phpunit

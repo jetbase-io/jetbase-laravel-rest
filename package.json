@@ -1,0 +1,22 @@
+{
+  "name": "jetbase-laravel-rest",
+  "version": "0.0.1",
+  "description": "JetBase - Laravel REST API backend",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "phpunit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukas-pierce/jetbase-laravel-rest.git"
+  },
+  "author": "Lukas Pierce",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lukas-pierce/jetbase-laravel-rest/issues"
+  },
+  "homepage": "https://github.com/lukas-pierce/jetbase-laravel-rest#readme"
+}
