@@ -63,17 +63,28 @@ class LoginTest extends ApiTestCase
         ]);
         $response->assertStatus(200);
 
-        $token = $response->json('token');
+        $responseData = $response->json();
+        $this->assertArrayHasKey('token', $responseData);
+        $this->assertArrayHasKey('rate_limit', $responseData);
+        $this->assertArrayHasKey('expires_after', $responseData);
+
+        // check token
+        $token = $responseData['token'];
         $this->assertIsString($token);
 
-        $response->assertHeader('X-Rate-Limit', config('api.rate_limit'));
-        $response->assertHeader('X-Expires-After');
+        // check rate_limit is int
+        $rateLimit = $responseData['rate_limit'];
+        $this->assertIsInt($rateLimit);
 
-        $expires = $response->headers->get('X-Expires-After');
-        $this->assertTrue(validRFC3339Date($expires));
+        // check rate_limit value
+        $this->assertEquals($rateLimit, config('api.rate_limit'));
 
-        // check in future
-        $expires = Carbon::parse($expires);
-        $this->assertTrue($expires->isFuture());
+        // check expires_after valid format
+        $expiresAfter = $responseData['expires_after'];
+        $this->assertTrue(validRFC3339Date($expiresAfter));
+
+        // check expires_after is in future
+        $expiresAfter = Carbon::parse($expiresAfter);
+        $this->assertTrue($expiresAfter->isFuture());
     }
 }
