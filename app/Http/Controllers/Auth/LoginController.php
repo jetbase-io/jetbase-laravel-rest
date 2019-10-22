@@ -39,11 +39,11 @@ class LoginController extends Controller
         $ttl = auth()->factory()->getTTL(); // in minutes
         $expires = now()->addMinutes($ttl);
 
-        return response()->json(['token' => $token])->withHeaders([
-            // max requests per hour
-            'X-Rate-Limit'    => config('api.rate_limit'),
+        return response()->json([
+            'token'         => $token,
+            'rate_limit'    => config('api.rate_limit'),
             // format: https://swagger.io/docs/specification/data-models/data-types/
-            'X-Expires-After' => $expires->format(DATE_RFC3339),
+            'expires_after' => $expires->format(DATE_RFC3339),
         ]);
     }
 }
