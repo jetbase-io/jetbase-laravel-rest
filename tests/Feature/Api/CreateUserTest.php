@@ -59,7 +59,7 @@ class CreateUserTest extends ApiTestCase
         $token = $this->login('admin@mail.com');
 
         // try create user
-        $response = $this->json('POST', '/users', [
+        $createResponse = $this->json('POST', '/users', [
             'id'                    => 0,
             'first_name'            => 'Test',
             'last_name'             => 'Test',
@@ -70,8 +70,14 @@ class CreateUserTest extends ApiTestCase
         ], [
             'Authorization' => 'Bearer ' . $token
         ]);
+        $createResponse->assertStatus(200); // successfully created
 
-        $response->assertStatus(200); // successfully created
+        // check return id
+        $createData = $createResponse->json();
+        $this->assertIsArray($createData);
+        $this->assertArrayHasKey('id', $createData);
+        $this->assertIsInt($createData['id']);
+        $createdUserId = $createData['id'];
 
         // search users, must be 2: admin and just created normal user
         $searchResponse = $this->json('GET', '/users', [], [
@@ -84,6 +90,7 @@ class CreateUserTest extends ApiTestCase
 
         // check created user
         $user = $searchUsers[1]; // users ordered by id, [0] is admin, [1] - created via API
+        $this->assertEquals($user['id'], $createdUserId);
         $this->assertEquals($user['first_name'], 'Test');
         $this->assertEquals($user['last_name'], 'Test');
         $this->assertEquals($user['email'], 'test@mail.com');
