@@ -79,10 +79,11 @@ class SearchUsersTest extends ApiTestCase
         $token = $this->login($admin->email);
 
         // perform search users
-        $response = $this->json('GET', '/users', [
+        $params = [
             'limit'  => 5,
             'offset' => 5 // second page
-        ], [
+        ];
+        $response = $this->json('GET', '/users?' . http_build_query($params), [], [
             'Authorization' => 'Bearer ' . $token
         ]);
         $response->assertStatus(200); // forbidden for normal user
