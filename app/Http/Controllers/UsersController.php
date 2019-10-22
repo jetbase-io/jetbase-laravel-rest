@@ -66,7 +66,7 @@ class UsersController extends Controller
         $user->save();
 
         return response()->json([
-            'success' => true,
+            'id' => $user->id,
         ]);
     }
 
