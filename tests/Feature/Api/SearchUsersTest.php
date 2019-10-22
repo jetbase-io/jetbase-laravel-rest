@@ -117,7 +117,7 @@ class SearchUsersTest extends ApiTestCase
         $token = $this->login($admin->email);
 
         // perform search users
-        $response = $this->json('GET', '/users', ['email' => 'super'], [
+        $response = $this->json('GET', '/users?' . http_build_query(['email' => 'super']), [], [
             'Authorization' => 'Bearer ' . $token
         ]);
         $response->assertStatus(200); // forbidden for normal user
