@@ -79,7 +79,7 @@ class UsersController extends Controller
      */
     public function search(Request $request)
     {
-        $data = $request->json()->all();
+        $data = $request->query();
         Validator::make($data, [
             'email'  => 'nullable|string',
             'limit'  => 'nullable|int|min:0',
