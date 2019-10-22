@@ -81,9 +81,9 @@ class UsersController extends Controller
     {
         $data = $request->json()->all();
         Validator::make($data, [
-            'email'     => 'nullable|string',
-            'page'      => 'nullable|int|min:1',
-            'page_size' => 'nullable|int|min:1',
+            'email'  => 'nullable|string',
+            'limit'  => 'nullable|int|min:0',
+            'offset' => 'nullable|int|min:0',
         ]);
 
         $this->authorize('viewAny', User::class);
@@ -95,17 +95,24 @@ class UsersController extends Controller
             $query->where('email', 'like', "%$qEmail%");
         }
 
+        $count = $query->count();
+
         // pagination
-        $page_size = Arr::get($data, 'page_size');
-        if (!is_null($page_size)) {
-            $page = Arr::get($data, 'page', 1);
-            $offset = ($page - 1) * $page_size;
-            $query->limit($page_size)->offset($offset);
+        if (Arr::has($data, 'limit')) {
+            $limit = Arr::get($data, 'limit');
+            $offset = Arr::get($data, 'offset', 0);
+            $query->limit($limit)->offset($offset);
+        } else {
+            $limit = null;
+            $offset = null;
         }
 
         $users = $query->get();
 
-        return response()->json(UserResource::collection($users));
+        return response()->json([
+            'items' => UserResource::collection($users),
+            'count' => $count,
+        ]);
     }
 
     /**
