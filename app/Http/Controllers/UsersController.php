@@ -259,7 +259,8 @@ class UsersController extends Controller
         $old_password = $request->old_password;
         if (!Hash::check($old_password, $user->password)) {
             return response()->json([
-                'error' => 'The old password is not correct.'
+                'success' => false,
+                'message' => 'The old password is not correct.'
             ], 403);
         }
 
