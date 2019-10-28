@@ -5,6 +5,7 @@ namespace Tests\Feature\Api;
 use App\Model\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 
 class ChangePasswordTest extends ApiTestCase
@@ -65,6 +66,32 @@ class ChangePasswordTest extends ApiTestCase
         ]);
 
         $response->assertStatus(403);
+    }
+
+    public function testInvalidPasswordConfirmation()
+    {
+        // create user
+        $user = factory(User::class)->create([
+            'password' => bcrypt('test_password')
+        ]);
+
+        // login
+        $token = $this->login($user->email, 'test_password');
+
+        // user tries change password with invalid password confirmation
+        $response = $this->json('PUT', "/users/{$user->id}/password", [
+            'password_old'          => 'test_password_invalid',
+            'password'              => 'super_secret',
+            'password_confirmation' => 'super_secret_123',
+        ], [
+            'Authorization' => 'Bearer ' . $token
+        ]);
+
+        $response->assertStatus(400);
+
+        // check error message
+        $errorMessage = Arr::get($response->json(), 'errors.password.0');
+        $this->assertStringContainsString('password confirmation does not match', $errorMessage);
     }
 
     public function testSuccessChange()
