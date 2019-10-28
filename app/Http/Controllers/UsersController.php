@@ -276,7 +276,7 @@ class UsersController extends Controller
             ], 403);
         }
 
-        $user->password = bcrypt($request->new_password);
+        $user->password = bcrypt($request->password);
         $user->save();
 
         return response()->json([
