@@ -6,6 +6,7 @@ namespace Tests\Feature\Api;
 use App\Model\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Arr;
 
 class SearchUsersTest extends ApiTestCase
 {
@@ -55,8 +56,12 @@ class SearchUsersTest extends ApiTestCase
             'Authorization' => 'Bearer ' . $token
         ]);
         $response->assertStatus(200); // forbidden for normal user
+        $responseData = $response->json();
+        $this->assertIsArray($responseData);
+        $this->assertArrayHasKey('items', $responseData);
+        $this->assertArrayHasKey('count', $responseData);
 
-        $responseUsers = $response->json();
+        $responseUsers = $responseData['items'];
         $this->assertIsArray($responseUsers);
         $this->assertCount(10, $responseUsers); // 9 normal + 1 admin
     }
@@ -74,20 +79,28 @@ class SearchUsersTest extends ApiTestCase
         $token = $this->login($admin->email);
 
         // perform search users
-        $response = $this->json('GET', '/users', [
-            'page'      => 2,
-            'page_size' => 5
-        ], [
+        $params = [
+            'limit'  => 5,
+            'offset' => 5 // second page
+        ];
+        $response = $this->json('GET', '/users?' . http_build_query($params), [], [
             'Authorization' => 'Bearer ' . $token
         ]);
         $response->assertStatus(200); // forbidden for normal user
+        $responseData = $response->json();
 
-        $responseUsers = $response->json();
+        // check users
+        $responseUsers = Arr::get($responseData, 'items');
         $this->assertIsArray($responseUsers);
         $this->assertCount(5, $responseUsers);
 
         // check id, on serverside users ordered by id
         $this->assertEquals($users[5]->id, $responseUsers[0]['id']);
+
+        // check count
+        $responseCount = Arr::get($responseData, 'count');
+        $this->assertIsInt($responseCount);
+        $this->assertEquals(10, $responseCount); // 9 normal users + 1 admin
     }
 
     public function testSearchByEmail()
@@ -104,12 +117,12 @@ class SearchUsersTest extends ApiTestCase
         $token = $this->login($admin->email);
 
         // perform search users
-        $response = $this->json('GET', '/users', ['email' => 'super'], [
+        $response = $this->json('GET', '/users?' . http_build_query(['email' => 'super']), [], [
             'Authorization' => 'Bearer ' . $token
         ]);
         $response->assertStatus(200); // forbidden for normal user
 
-        $responseUsers = $response->json();
+        $responseUsers = $response->json('items');
         $this->assertIsArray($responseUsers);
         $this->assertCount(2, $responseUsers);
 

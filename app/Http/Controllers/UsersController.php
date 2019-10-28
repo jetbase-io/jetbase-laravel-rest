@@ -79,11 +79,11 @@ class UsersController extends Controller
      */
     public function search(Request $request)
     {
-        $data = $request->json()->all();
+        $data = $request->query();
         Validator::make($data, [
-            'email'     => 'nullable|string',
-            'page'      => 'nullable|int|min:1',
-            'page_size' => 'nullable|int|min:1',
+            'email'  => 'nullable|string',
+            'limit'  => 'nullable|int|min:0',
+            'offset' => 'nullable|int|min:0',
         ]);
 
         $this->authorize('viewAny', User::class);
@@ -95,17 +95,24 @@ class UsersController extends Controller
             $query->where('email', 'like', "%$qEmail%");
         }
 
+        $count = $query->count();
+
         // pagination
-        $page_size = Arr::get($data, 'page_size');
-        if (!is_null($page_size)) {
-            $page = Arr::get($data, 'page', 1);
-            $offset = ($page - 1) * $page_size;
-            $query->limit($page_size)->offset($offset);
+        if (Arr::has($data, 'limit')) {
+            $limit = Arr::get($data, 'limit');
+            $offset = Arr::get($data, 'offset', 0);
+            $query->limit($limit)->offset($offset);
+        } else {
+            $limit = null;
+            $offset = null;
         }
 
         $users = $query->get();
 
-        return response()->json(UserResource::collection($users));
+        return response()->json([
+            'items' => UserResource::collection($users),
+            'count' => $count,
+        ]);
     }
 
     /**
@@ -172,6 +179,18 @@ class UsersController extends Controller
             'email'      => 'nullable|string|email',
             'role_id'    => 'nullable|int',
         ])->validate();
+
+        // if want update email - check email already taken
+        if (Arr::has($data, 'email')) {
+            $email = Arr::get($data, 'email');
+            $emailTaken = User::whereEmail($email)->where('id', '<>', $user->id)->exists();
+            if ($emailTaken) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'This email already used by another user: ' . $email,
+                ], 400);
+            }
+        }
 
         // update only if passed
         if (Arr::has($data, 'first_name')) {
@@ -244,19 +263,20 @@ class UsersController extends Controller
 
         $data = $request->json()->all();
         Validator::make($data, [
-            'old_password' => 'required|string',
-            'new_password' => 'required|string|min:8',
+            'password_old' => 'required|string',
+            'password'     => 'required|string|min:8|confirmed',
         ])->validate();
 
         // check old password
-        $old_password = $request->old_password;
-        if (!Hash::check($old_password, $user->password)) {
+        $password_old = $request->password_old;
+        if (!Hash::check($password_old, $user->password)) {
             return response()->json([
-                'error' => 'The old password is not correct.'
+                'success' => false,
+                'message' => 'The old password is not correct.'
             ], 403);
         }
 
-        $user->password = bcrypt($request->new_password);
+        $user->password = bcrypt($request->password);
         $user->save();
 
         return response()->json([

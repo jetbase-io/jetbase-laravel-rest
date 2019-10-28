@@ -84,7 +84,7 @@ class CreateUserTest extends ApiTestCase
             'Authorization' => 'Bearer ' . $token
         ]);
         $searchResponse->assertStatus(200);
-        $searchUsers = $searchResponse->json();
+        $searchUsers = $searchResponse->json('items');
         $this->assertIsArray($searchUsers);
         $this->assertCount(2, $searchUsers);
 

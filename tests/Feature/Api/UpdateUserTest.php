@@ -139,4 +139,38 @@ class UpdateUserTest extends ApiTestCase
         // check role changed
         $this->assertEquals($role->id, $user->role_id);
     }
+
+    /**
+     * Assert error when tries change user's email, if this email already taken by another user
+     */
+    public function testUpdateEmailWhenTaken()
+    {
+        // create admin
+        $admin = factory(User::class)->state('admin')->create();
+
+        // create 2 normal users
+        $user1 = factory(User::class)->create(['email' => 'email1@example.com']);
+        $user2 = factory(User::class)->create(['email' => 'email2@example.com']);
+
+        // login by admin
+        $token = $this->login($admin->email);
+
+        // admin tries change user2 email
+        $response = $this->json('PUT', "/users/$user2->id", [
+            'email' => 'email1@example.com'
+        ], [
+            'Authorization' => 'Bearer ' . $token
+        ]);
+        $response->assertStatus(400);
+
+        $errorMessage = $response->json('message');
+        $this->assertStringContainsString('email already used', $errorMessage);
+
+        // check users emails not changed
+        $dbUsers = User::noRole()->orderBy('id')->get();
+        $dbUser1 = $dbUsers[0];
+        $dbUser2 = $dbUsers[1];
+        $this->assertEquals($dbUser1->email, $user1->email);
+        $this->assertEquals($dbUser2->email, $user2->email);
+    }
 }

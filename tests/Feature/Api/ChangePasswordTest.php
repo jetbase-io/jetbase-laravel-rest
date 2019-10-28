@@ -5,6 +5,7 @@ namespace Tests\Feature\Api;
 use App\Model\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 
 class ChangePasswordTest extends ApiTestCase
@@ -20,8 +21,8 @@ class ChangePasswordTest extends ApiTestCase
 
         // guest tries change password for user
         $response = $this->json('PUT', "/users/{$user->id}/password", [
-            'old_password' => 'test_password',
-            'new_password' => 'super_secret'
+            'password_old' => 'test_password',
+            'password'     => 'super_secret'
         ]);
 
         $response->assertStatus(401);
@@ -57,13 +58,40 @@ class ChangePasswordTest extends ApiTestCase
 
         // user tries change password with invalid old password
         $response = $this->json('PUT', "/users/{$user->id}/password", [
-            'old_password' => 'test_password_invalid',
-            'new_password' => 'super_secret'
+            'password_old'          => 'test_password_invalid',
+            'password'              => 'super_secret',
+            'password_confirmation' => 'super_secret',
         ], [
             'Authorization' => 'Bearer ' . $token
         ]);
 
         $response->assertStatus(403);
+    }
+
+    public function testInvalidPasswordConfirmation()
+    {
+        // create user
+        $user = factory(User::class)->create([
+            'password' => bcrypt('test_password')
+        ]);
+
+        // login
+        $token = $this->login($user->email, 'test_password');
+
+        // user tries change password with invalid password confirmation
+        $response = $this->json('PUT', "/users/{$user->id}/password", [
+            'password_old'          => 'test_password_invalid',
+            'password'              => 'super_secret',
+            'password_confirmation' => 'super_secret_123',
+        ], [
+            'Authorization' => 'Bearer ' . $token
+        ]);
+
+        $response->assertStatus(400);
+
+        // check error message
+        $errorMessage = Arr::get($response->json(), 'errors.password.0');
+        $this->assertStringContainsString('password confirmation does not match', $errorMessage);
     }
 
     public function testSuccessChange()
@@ -78,8 +106,9 @@ class ChangePasswordTest extends ApiTestCase
 
         // user tries change password for self
         $response = $this->json('PUT', "/users/{$user->id}/password", [
-            'old_password' => 'test_password',
-            'new_password' => 'super_secret'
+            'password_old'          => 'test_password',
+            'password'              => 'super_secret',
+            'password_confirmation' => 'super_secret',
         ], [
             'Authorization' => 'Bearer ' . $token
         ]);
@@ -116,8 +145,9 @@ class ChangePasswordTest extends ApiTestCase
 
         // admin tries change user's password
         $response = $this->json('PUT', "/users/{$user->id}/password", [
-            'old_password' => 'password1',
-            'new_password' => 'password2'
+            'password_old'          => 'password1',
+            'password'              => 'password2',
+            'password_confirmation' => 'password2'
         ], [
             'Authorization' => 'Bearer ' . $token
         ]);
