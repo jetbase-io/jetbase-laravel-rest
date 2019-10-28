@@ -20,6 +20,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property-read int|null $notifications_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\User noRole()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\User query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\User whereFirstName($value)
@@ -62,6 +63,16 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
         'role_id'           => 'int'
     ];
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeNoRole($query)
+    {
+        return $query->whereNull('role_id');
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
