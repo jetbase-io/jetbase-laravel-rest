@@ -20,8 +20,8 @@ class ChangePasswordTest extends ApiTestCase
 
         // guest tries change password for user
         $response = $this->json('PUT', "/users/{$user->id}/password", [
-            'old_password' => 'test_password',
-            'new_password' => 'super_secret'
+            'password_old' => 'test_password',
+            'password'     => 'super_secret'
         ]);
 
         $response->assertStatus(401);
@@ -57,8 +57,8 @@ class ChangePasswordTest extends ApiTestCase
 
         // user tries change password with invalid old password
         $response = $this->json('PUT', "/users/{$user->id}/password", [
-            'old_password' => 'test_password_invalid',
-            'new_password' => 'super_secret'
+            'password_old' => 'test_password_invalid',
+            'password'     => 'super_secret'
         ], [
             'Authorization' => 'Bearer ' . $token
         ]);
@@ -78,8 +78,8 @@ class ChangePasswordTest extends ApiTestCase
 
         // user tries change password for self
         $response = $this->json('PUT', "/users/{$user->id}/password", [
-            'old_password' => 'test_password',
-            'new_password' => 'super_secret'
+            'password_old' => 'test_password',
+            'password'     => 'super_secret'
         ], [
             'Authorization' => 'Bearer ' . $token
         ]);
@@ -116,8 +116,8 @@ class ChangePasswordTest extends ApiTestCase
 
         // admin tries change user's password
         $response = $this->json('PUT', "/users/{$user->id}/password", [
-            'old_password' => 'password1',
-            'new_password' => 'password2'
+            'password_old' => 'password1',
+            'password'     => 'password2'
         ], [
             'Authorization' => 'Bearer ' . $token
         ]);
