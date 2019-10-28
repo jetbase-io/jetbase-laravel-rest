@@ -79,8 +79,9 @@ class ChangePasswordTest extends ApiTestCase
 
         // user tries change password for self
         $response = $this->json('PUT', "/users/{$user->id}/password", [
-            'password_old' => 'test_password',
-            'password'     => 'super_secret'
+            'password_old'          => 'test_password',
+            'password'              => 'super_secret',
+            'password_confirmation' => 'super_secret',
         ], [
             'Authorization' => 'Bearer ' . $token
         ]);
