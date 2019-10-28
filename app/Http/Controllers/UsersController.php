@@ -180,6 +180,18 @@ class UsersController extends Controller
             'role_id'    => 'nullable|int',
         ])->validate();
 
+        // if want update email - check email already taken
+        if (Arr::has($data, 'email')) {
+            $email = Arr::get($data, 'email');
+            $emailTaken = User::whereEmail($email)->where('id', '<>', $user->id)->exists();
+            if ($emailTaken) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'This email already used by another user: ' . $email,
+                ], 400);
+            }
+        }
+
         // update only if passed
         if (Arr::has($data, 'first_name')) {
             $user->first_name = Arr::get($data, 'first_name');
