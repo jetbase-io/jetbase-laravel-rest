@@ -263,14 +263,13 @@ class UsersController extends Controller
 
         $data = $request->json()->all();
         Validator::make($data, [
-            'old_password' => 'required|string',
-            'new_password' => 'required|string|min:8',
-            // todo new password confirmation
+            'password_old' => 'required|string',
+            'password'     => 'required|string|min:8|confirmed',
         ])->validate();
 
         // check old password
-        $old_password = $request->old_password;
-        if (!Hash::check($old_password, $user->password)) {
+        $password_old = $request->password_old;
+        if (!Hash::check($password_old, $user->password)) {
             return response()->json([
                 'success' => false,
                 'message' => 'The old password is not correct.'
