@@ -253,6 +253,7 @@ class UsersController extends Controller
         Validator::make($data, [
             'old_password' => 'required|string',
             'new_password' => 'required|string|min:8',
+            // todo new password confirmation
         ])->validate();
 
         // check old password
